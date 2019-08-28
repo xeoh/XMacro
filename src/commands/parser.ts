@@ -21,3 +21,41 @@ export function parse(file: string): { first: string, commands: { [key: string]:
         }
     }
 }
+
+const TYPE_MOUSE_MOVE = "MouseMove"
+
+export interface CommandData {
+    name: string
+    nextCommand: string
+    preDelay: number
+    postDelay: number
+    type: typeof TYPE_MOUSE_MOVE | "KeyboardPress"
+}
+
+export interface MouseMoveCommandData extends CommandData {
+    type: typeof TYPE_MOUSE_MOVE
+    x: number | string
+    y: number | string
+    offsetX: number | string
+    offsetY: number | string
+}
+
+export function parseSingleData(data: any) {
+    switch (data.type) {
+        case TYPE_MOUSE_MOVE:
+            return parseMouseMoveCommandData(data)
+        default:
+            return undefined
+    }
+}
+
+export function parseMouseMoveCommandData(data: MouseMoveCommandData) {
+    if (data.type !== TYPE_MOUSE_MOVE) return undefined
+    if (!data.name) return undefined
+
+    const command = new MouseMoveCommand()
+    command.name = data.name
+    command.next = data.nextCommand
+
+    return command
+}

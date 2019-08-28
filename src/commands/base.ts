@@ -1,6 +1,10 @@
 import Serial from "serialport"
 
 export abstract class BaseCommand {
+    protected static fromJson(json: any): BaseCommand | undefined {
+        return undefined
+    }
+
     protected preDelay = 1000
     protected postDelay = 2000
 
