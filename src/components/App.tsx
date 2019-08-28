@@ -1,6 +1,7 @@
 import React from "react"
-import * as cp from "child_process"
 import SerialPort from "serialport"
+
+import { parse } from "../commands/parser"
 
 export class App extends React.Component {
     private serialPort: SerialPort | undefined
@@ -9,7 +10,7 @@ export class App extends React.Component {
         return (
             <div>
                 <button onClick={() => { this.connect() }} >Connect</button>
-                <button onClick={() => { this.sendMessage() }} >Send Message</button>
+                <button onClick={() => { this.start() }} >Start</button>
             </div>
         )
     }
@@ -18,6 +19,10 @@ export class App extends React.Component {
         if (!!this.serialPort) return
 
         const portName = await this.getSerialPortName()
+        if (!portName) {
+            console.error("Cannot find COM port")
+            return
+        }
 
         const serialPort = new SerialPort(portName, {
             baudRate: 9600,
@@ -37,29 +42,52 @@ export class App extends React.Component {
         })
     }
 
-    private async sendMessage() {
-        if (!this.serialPort) {
-            console.error("No device connected")
-            return
+    private async start() {
+        // if (!this.serialPort) {
+        //     console.error("No device connected")
+        //     return
+        // }
+
+        console.log("Start of Command\n")
+
+        const sampleSerial = {
+            write: (message: string) => {
+                console.log(message)
+            }
         }
         
-        console.log("start send message")
-        await new Promise((resolve) => {
-            setTimeout(() => { resolve() }, 3000)
+        const { first, commands } = parse("./datafiles/test.json")
+        let command = commands[first]
+        while(!!command) {
+            command.onProgressChange((progress) => {
+                this.setState({ progress: progress })
+            })
+
+            this.setState({ current: command.name })
+            await command.run(sampleSerial as SerialPort)
+
+            if (!command.nextCommand) break
+            command = commands[command.nextCommand]
+        }
+
+        this.setState({
+            current: "None",
+            progress: "None"
         })
-        console.log(this.serialPort.writable)
-        console.log("sending signal <1234>")
-        this.serialPort.write("<1234>")
+
+        console.log("End of Command\n")
     }
 
     private async getSerialPortName() {
-        const portName: string = await new Promise((resolve) => {
+        const portName: string | undefined = await new Promise((resolve) => {
             SerialPort.list((err, ports) => {
                 ports.forEach(port => {
-                    if (port.manufacturer.includes("Arduino LLC")) {
+                    if (!!port && !!port.manufacturer && port.manufacturer.includes("Arduino LLC")) {
                         resolve(port.comName)
+                        return
                     }
                 })
+                resolve(undefined)
             })
         })
         return portName

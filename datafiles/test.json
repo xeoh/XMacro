@@ -1,0 +1,32 @@
+{
+    "name": "sample",
+    "first": "1",
+    "commands": {
+        "1": {
+            "type": "MOUSE",
+            "name": "1",
+            "preDelay": 300,
+            "postDelay": 0,
+            "nextCommand": "2",
+            "action": "MOVE",
+            "x": 100,
+            "y": 100
+        },
+        "2": {
+            "type": "MOUSE",
+            "name": "2",
+            "preDelay": 300,
+            "postDelay": 0,
+            "nextCommand": "3",
+            "action": "LEFT_CLICK"
+        },
+        "3": {
+            "type": "MOUSE",
+            "name": "3",
+            "preDelay": 300,
+            "postDelay": 0,
+            "nextCommand": "1",
+            "action": "RIGHT_CLICK"
+        }
+    }
+}
