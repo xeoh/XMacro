@@ -36,8 +36,12 @@ export class MouseMoveCommand extends BaseCommand {
             console.error("No device connected")
             return
         }
-        
-        serial.write(`<mouse,${this._x},${this._y}>`)
+        console.log(`<mouse_move,${this._x},${this._y}>`)
+        serial.write(`<mouse_move,${this._x},${this._y}>`)
+
+        await new Promise((resolve) => {
+            setTimeout(() => { resolve() }, 1000)
+        })
     }
 }
 

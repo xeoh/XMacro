@@ -5,11 +5,11 @@
         "1": {
             "type": "MOUSE",
             "name": "1",
-            "preDelay": 300,
+            "preDelay": 3000,
             "postDelay": 0,
             "nextCommand": "2",
             "action": "MOVE",
-            "x": 100,
+            "x": 200,
             "y": 100
         },
         "2": {
@@ -18,15 +18,18 @@
             "preDelay": 300,
             "postDelay": 0,
             "nextCommand": "3",
-            "action": "LEFT_CLICK"
+            "action": "MOVE",
+            "x": -200,
+            "y": 100
         },
         "3": {
             "type": "MOUSE",
             "name": "3",
             "preDelay": 300,
             "postDelay": 0,
-            "nextCommand": "1",
-            "action": "RIGHT_CLICK"
+            "action": "MOVE",
+            "x": 100,
+            "y": 200
         }
     }
 }

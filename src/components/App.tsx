@@ -43,18 +43,12 @@ export class App extends React.Component {
     }
 
     private async start() {
-        // if (!this.serialPort) {
-        //     console.error("No device connected")
-        //     return
-        // }
+        if (!this.serialPort) {
+            console.error("No device connected")
+            return
+        }
 
         console.log("Start of Command\n")
-
-        const sampleSerial = {
-            write: (message: string) => {
-                console.log(message)
-            }
-        }
         
         const { first, commands } = parse("./datafiles/test.json")
         let command = commands[first]
@@ -64,7 +58,7 @@ export class App extends React.Component {
             })
 
             this.setState({ current: command.name })
-            await command.run(sampleSerial as SerialPort)
+            await command.run(this.serialPort)
 
             if (!command.nextCommand) break
             command = commands[command.nextCommand]
