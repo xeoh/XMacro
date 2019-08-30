@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@types/serialport": "^7.0.4",
+    "iohook": "^0.6.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "serialport": "^7.1.5",
@@ -32,5 +33,18 @@
     "ts-jest": "^24.0.2",
     "typescript": "^3.5.3",
     "webpack": "~4.35.3"
+  },
+  "iohook": {
+    "targets": [
+      "node-57",
+      "electron-70"
+    ],
+    "platforms": [
+      "win32",
+      "darwin"
+    ],
+    "arches": [
+      "x64"
+    ]
   }
 }
