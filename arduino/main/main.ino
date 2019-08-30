@@ -111,6 +111,7 @@ void evalData() {
             receivedChars[idx][0] = '\0';
         }
         newData = false;
+        Serial.println("<end>");
     }
 }
 

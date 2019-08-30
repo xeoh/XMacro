@@ -1,4 +1,5 @@
 import { BaseCommand, BaseCommandData } from "./base"
+import { SerialManager } from "../utils/serial"
 
 export enum MOUSE_ACTION_TYPE {
     MOVE = "MOVE",
@@ -29,19 +30,11 @@ export class MouseMoveCommand extends BaseCommand {
         this._y = data.y
     }
 
-    async main(serial: any) {
+    async main() {
         this.setProgress("main")
-        
-        if (!serial) {
-            console.error("No device connected")
-            return
-        }
-        console.log(`<mouse_move,${this._x},${this._y}>`)
-        serial.write(`<mouse_move,${this._x},${this._y}>`)
-
-        await new Promise((resolve) => {
-            setTimeout(() => { resolve() }, 1000)
-        })
+        const command = `<mouse_move,${this._x},${this._y}>`
+        console.log(command)
+        await SerialManager.getInstance().write(command)
     }
 }
 
@@ -64,32 +57,40 @@ export class MousePressCommand extends BaseCommand {
         this.action = data.action
     }
 
-    async main(serial: any) {
+    async main() {
         this.setProgress("main")
-        
-        if (!serial) {
-            console.error("No device connected")
-            return
-        }
-        
+        let command = ""
+
         switch(this.action) {
             case MOUSE_ACTION_TYPE.LEFT_CLICK:
-                console.log(`<mouse_click,left>`)
+                command = `<mouse_click,left>`
+                console.log(command)
+                await SerialManager.getInstance().write(command)
                 break
             case MOUSE_ACTION_TYPE.RIGHT_CLICK:
-                console.log(`<mouse_click,right>`)
+                command = `<mouse_click,right>`
+                console.log(command)
+                await SerialManager.getInstance().write(command)
                 break
             case MOUSE_ACTION_TYPE.LEFT_DOWN:
-                console.log(`<mouse_down,left>`)
+                command = `<mouse_down,left>`
+                console.log(command)
+                await SerialManager.getInstance().write(command)
                 break
             case MOUSE_ACTION_TYPE.RIGHT_DOWN:
-                console.log(`<mouse_down,right>`)
+                command = `<mouse_down,right>`
+                console.log(command)
+                await SerialManager.getInstance().write(command)
                 break
             case MOUSE_ACTION_TYPE.LEFT_UP:
-                console.log(`<mouse_up,left>`)
+                command = `<mouse_up,left>`
+                console.log(command)
+                await SerialManager.getInstance().write(command)
                 break
             case MOUSE_ACTION_TYPE.RIGHT_UP:
-                console.log(`<mouse_up,right>`)
+                command = `<mouse_up,right>`
+                console.log(command)
+                await SerialManager.getInstance().write(command)
                 break
         }
     }
@@ -101,7 +102,14 @@ export function mouseDataToCommand(data: any) {
     switch (data.action) {
         case MOUSE_ACTION_TYPE.MOVE:
             return new MouseMoveCommand(data)
-        default:
+        case MOUSE_ACTION_TYPE.LEFT_CLICK:
+        case MOUSE_ACTION_TYPE.RIGHT_CLICK:
+        case MOUSE_ACTION_TYPE.LEFT_DOWN:
+        case MOUSE_ACTION_TYPE.RIGHT_DOWN:
+        case MOUSE_ACTION_TYPE.LEFT_UP:
+        case MOUSE_ACTION_TYPE.RIGHT_UP:
             return new MousePressCommand(data)
+        default:
+            return undefined
     }
 }

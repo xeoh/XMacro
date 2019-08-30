@@ -1,5 +1,3 @@
-import Serial from "serialport"
-
 export interface BaseCommandData {
     name: string
     preDelay: number
@@ -39,9 +37,9 @@ export abstract class BaseCommand {
         this.progressCallback = callback
     }
 
-    public async run(serial: Serial) {
+    public async run() {
         await this.preRun()
-        await this.main(serial)
+        await this.main()
         await this.postRun()
     }
     
@@ -59,5 +57,5 @@ export abstract class BaseCommand {
         })
     }
 
-    protected abstract async main(serial: Serial): Promise<void>
+    protected abstract async main(): Promise<void>
 }
