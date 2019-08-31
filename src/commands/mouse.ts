@@ -36,8 +36,7 @@ export class MouseMoveCommand extends BaseCommand {
     async main() {
         this.setProgress("main")
 
-        let smx = 0
-        let smy = 0
+        console.log(`<mouse_move,${this._x},${this._y}>`)
 
         for (let i = 0; i < MOUSE_DURATION; i++) {
             const { x: x0, y : y0 } = getMousePos()

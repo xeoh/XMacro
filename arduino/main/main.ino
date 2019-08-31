@@ -4,19 +4,8 @@
 
 char receivedChar;
 const byte numChars = 32;
-const unsigned long DURATION = 2000;
 char receivedChars[numChars][numChars];
 boolean newData = false;
-unsigned long old_time = 0;
-unsigned long new_time = 0;
-int dx = 0;
-int dy = 0;
-int rmx = 0;
-int rmy = 0;
-int sx = 0;
-int sy = 0;
-unsigned long dt = 0;
-unsigned long st = 0;
 
 void setup() {
     Serial.begin(9600);
@@ -66,6 +55,51 @@ void recvWithStartEndMarkers() {
     }
 }
 
+void moveMouse(String command) {
+    if (command == "mouse_move") {
+        String x(receivedChars[1]);
+        String y(receivedChars[2]);
+
+        Mouse.move(x.toInt(), y.toInt(), 0);
+    }
+}
+
+void mouseClick(String command) {
+    if (command == "mouse_click") {
+        String x(receivedChars[1]);
+
+        if (x == "left") {
+            Mouse.click(MOUSE_LEFT);
+        } else if (x == "right") {
+            Mouse.click(MOUSE_RIGHT);
+        }
+    }
+}
+
+void mouseDown(String command) {
+    if (command == "mouse_down") {
+        String x(receivedChars[1]);
+
+        if (x == "left") {
+            Mouse.press(MOUSE_LEFT);
+        } else if (x == "right") {
+            Mouse.press(MOUSE_RIGHT);
+        }
+    }
+}
+
+void mouseUp(String command) {
+    if (command == "mouse_up") {
+        String x(receivedChars[1]);
+
+        if (x == "left") {
+            Mouse.release(MOUSE_LEFT);
+        } else if (x == "right") {
+            Mouse.release(MOUSE_RIGHT);
+        }
+    }
+}
+
 void evalData() {
     if (newData == true) {
         // Serial.println("Input: ");
@@ -75,26 +109,13 @@ void evalData() {
         //     Serial.println(receivedChars[i]);
         //     i++;
         // }
+        String command(receivedChars[0]);
+        
+        moveMouse(command);
+        mouseClick(command);
+        mouseDown(command);
+        mouseUp(command);
 
-        if (String(receivedChars[0]) == "mouse_move") {
-            old_time = millis();
-
-            String x(receivedChars[1]);
-            String y(receivedChars[2]);
-
-            sx = 0;
-            sy = 0;
-            st = 0;
-            // Serial.println("mouse_move");
-            // Serial.println(x);
-            // Serial.println(y);
-            Mouse.move(x.toInt(), y.toInt(), 0);
-        } else if (String(receivedChars[0]) == "mouse_click") {
-            Serial.println("Mouse Click Command");
-            Serial.println(receivedChars[1]);
-        }
-
-        // Keyboard.print(receivedChars);
         for (int idx = 0; idx < numChars; ++idx) {
             receivedChars[idx][0] = '\0';
         }

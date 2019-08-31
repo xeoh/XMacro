@@ -5,10 +5,29 @@
         "1": {
             "type": "MOUSE",
             "preDelay": 3000,
-            "postDelay": 0,
+            "nextCommand": "2",
             "action": "MOVE",
-            "x": 0,
-            "y": 0
+            "x": 300,
+            "y": 300
+        },
+        "2": {
+            "type": "MOUSE",
+            "preDelay": 3000,
+            "nextCommand": "3",
+            "action": "LEFT_DOWN"
+        },
+        "3": {
+            "type": "MOUSE",
+            "preDelay": 3000,
+            "nextCommand": "4",
+            "action": "MOVE",
+            "x": 400,
+            "y": 400
+        },
+        "4": {
+            "type": "MOUSE",
+            "preDelay": 3000,
+            "action": "LEFT_UP"
         }
     }
 }
