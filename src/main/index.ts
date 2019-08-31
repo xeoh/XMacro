@@ -14,8 +14,8 @@ function createMainWindow() {
     webPreferences: {
       nodeIntegration: true
     },
-    width: 1200,
-    height: 800
+    width: 900,
+    height: 600
   })
 
   if (isDevelopment) {

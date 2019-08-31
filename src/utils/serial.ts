@@ -94,7 +94,7 @@ export class SerialManager {
             }
         }
 
-        console.log(`Device Log: ${data.toString()}`)
+        // console.log(`Device Log: ${data.toString()}`)
     }
 
     private async getSerialPorts() {

@@ -1,5 +1,8 @@
 import { BaseCommand, BaseCommandData } from "./base"
 import { SerialManager } from "../utils/serial"
+import { getMousePos } from "../utils/native-io"
+
+const MOUSE_DURATION = 300
 
 export enum MOUSE_ACTION_TYPE {
     MOVE = "MOVE",
@@ -15,13 +18,13 @@ export const MOUSE_TYPE = "MOUSE"
 
 export interface MouseMoveCommandData extends BaseCommandData {
     action: MOUSE_ACTION_TYPE.MOVE,
-    x: number | string
-    y: number | string
+    x: number
+    y: number
 }
 
 export class MouseMoveCommand extends BaseCommand {
-    private _x: number | string
-    private _y: number | string
+    private _x: number
+    private _y: number
 
     constructor(data: MouseMoveCommandData) {
         super(data)
@@ -32,9 +35,22 @@ export class MouseMoveCommand extends BaseCommand {
 
     async main() {
         this.setProgress("main")
-        const command = `<mouse_move,${this._x},${this._y}>`
-        console.log(command)
-        await SerialManager.getInstance().write(command)
+
+        let smx = 0
+        let smy = 0
+
+        for (let i = 0; i < MOUSE_DURATION; i++) {
+            const { x: x0, y : y0 } = getMousePos()
+            const X = this._x - x0
+            const Y = this._y - y0
+            const signX = Math.sign(X)
+            const signY = Math.sign(Y)
+            const dx = Math.floor(Math.abs(X) / (MOUSE_DURATION - i))
+            const dy = Math.floor(Math.abs(Y) / (MOUSE_DURATION - i))
+
+            const command = `<mouse_move,${dx * signX},${dy * signY}>`
+            await SerialManager.getInstance().write(command)
+        }
     }
 }
 

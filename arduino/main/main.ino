@@ -1,8 +1,10 @@
 #include <Keyboard.h>
 #include <Mouse.h>
+#include <math.h>
 
 char receivedChar;
 const byte numChars = 32;
+const unsigned long DURATION = 2000;
 char receivedChars[numChars][numChars];
 boolean newData = false;
 unsigned long old_time = 0;
@@ -11,7 +13,10 @@ int dx = 0;
 int dy = 0;
 int rmx = 0;
 int rmy = 0;
+int sx = 0;
+int sy = 0;
 unsigned long dt = 0;
+unsigned long st = 0;
 
 void setup() {
     Serial.begin(9600);
@@ -61,28 +66,6 @@ void recvWithStartEndMarkers() {
     }
 }
 
-void moveMosue(int x, int y) {
-    new_time = millis();
-    int min = abs(x);
-    if (abs(x) > abs(y)) {
-        min = abs(y);
-    }
-
-    dt = new_time - old_time;
-    dx = x / min;
-    dy = y / min;
-    rmx = x % min;
-    rmy = y % min;
-
-    for (int i = 0; i < min; ++i) {
-        Mouse.move(dx, dy, 0);
-    }
-
-    Mouse.move(rmx, rmy, 0);
-
-    old_time = new_time;
-}
-
 void evalData() {
     if (newData == true) {
         // Serial.println("Input: ");
@@ -99,8 +82,13 @@ void evalData() {
             String x(receivedChars[1]);
             String y(receivedChars[2]);
 
-            moveMosue(x.toInt(), y.toInt());
-            Serial.println("mouse_move end");
+            sx = 0;
+            sy = 0;
+            st = 0;
+            // Serial.println("mouse_move");
+            // Serial.println(x);
+            // Serial.println(y);
+            Mouse.move(x.toInt(), y.toInt(), 0);
         } else if (String(receivedChars[0]) == "mouse_click") {
             Serial.println("Mouse Click Command");
             Serial.println(receivedChars[1]);

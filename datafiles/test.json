@@ -6,59 +6,9 @@
             "type": "MOUSE",
             "preDelay": 3000,
             "postDelay": 0,
-            "nextCommand": "2",
             "action": "MOVE",
-            "x": 200,
-            "y": 100
-        },
-        "2": {
-            "type": "MOUSE",
-            "preDelay": 300,
-            "postDelay": 0,
-            "nextCommand": "3",
-            "action": "MOVE",
-            "x": -200,
-            "y": 100
-        },
-        "3": {
-            "type": "MOUSE",
-            "preDelay": 300,
-            "postDelay": 0,
-            "nextCommand": "4",
-            "action": "MOVE",
-            "x": 100,
-            "y": 200
-        },
-        "4": {
-            "type": "MOUSE",
-            "preDelay": 300,
-            "postDelay": 0,
-            "nextCommand": "5",
-            "action": "LEFT_CLICK"
-        },
-        "5": {
-            "type": "KEYBOARD",
-            "preDelay": 300,
-            "postDelay": 0,
-            "nextCommand": "6",
-            "action": "DOWN",
-            "key": "LEFT_CTRL"
-        },
-        "6": {
-            "type": "KEYBOARD",
-            "preDelay": 300,
-            "postDelay": 0,
-            "nextCommand": "7",
-            "action": "PRESS",
-            "key": "F5"
-        },
-        "7": {
-            "type": "KEYBOARD",
-            "preDelay": 300,
-            "postDelay": 0,
-            "nextCommand": "8",
-            "action": "UP",
-            "key": "LEFT_CTRL"
+            "x": 0,
+            "y": 0
         }
     }
 }

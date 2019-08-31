@@ -2,6 +2,7 @@
   "name": "electron-webpack-quick-start",
   "version": "0.0.0",
   "license": "MIT",
+  "gypfile": true,
   "scripts": {
     "dev": "electron-webpack dev",
     "compile": "electron-webpack",
@@ -13,6 +14,7 @@
   "dependencies": {
     "@types/serialport": "^7.0.4",
     "iohook": "^0.6.1",
+    "node-addon-api": "^1.7.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "serialport": "^7.1.5",
@@ -30,13 +32,14 @@
     "electron-webpack": "^2.7.4",
     "electron-webpack-ts": "^3.2.0",
     "jest": "^24.9.0",
+    "node-gyp": "^5.0.3",
     "ts-jest": "^24.0.2",
     "typescript": "^3.5.3",
     "webpack": "~4.35.3"
   },
   "iohook": {
     "targets": [
-      "node-57",
+      "node-64",
       "electron-70"
     ],
     "platforms": [

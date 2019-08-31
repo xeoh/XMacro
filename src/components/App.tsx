@@ -20,7 +20,7 @@ export class App extends React.Component<{}, AppState> {
         IOHookManager.getInstance().registerHotKey(
             "s",
             {
-                metaKey: true,
+                ctrlKey: true,
                 shiftKey: true
             },
             () => {
@@ -30,7 +30,7 @@ export class App extends React.Component<{}, AppState> {
         IOHookManager.getInstance().registerHotKey(
             "d",
             {
-                metaKey: true,
+                ctrlKey: true,
                 shiftKey: true
             },
             () => {
@@ -78,7 +78,7 @@ export class App extends React.Component<{}, AppState> {
         }
 
         this.setState({
-            active: false,
+            active: true,
             running: false
         })
         console.log("End of Command\n")
