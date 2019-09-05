@@ -2,7 +2,6 @@ import React from "react"
 
 import { parse } from "../commands/parser"
 import { SerialManager } from "../utils/serial"
-import { IOHookManager } from "../utils/hooks"
 
 export interface AppState {
     active: boolean
@@ -17,35 +16,12 @@ export class App extends React.Component<{}, AppState> {
 
     componentDidMount() {
         SerialManager.getInstance().connect()
-        IOHookManager.getInstance().registerHotKey(
-            "s",
-            {
-                ctrlKey: true,
-                shiftKey: true
-            },
-            () => {
-                this.start()
-            }
-        )
-        IOHookManager.getInstance().registerHotKey(
-            "d",
-            {
-                ctrlKey: true,
-                shiftKey: true
-            },
-            () => {
-                this.stop()
-            }
-        )
     }
 
     render() {
         return (
             <div>
                 <button onClick={() => { this.toggleActive() }} >{this.state.active ? "비활성화" : "활성화" }</button>
-                <div>
-                    press CMD+SHIFT+S to start commands
-                </div>
             </div>
         )
     }

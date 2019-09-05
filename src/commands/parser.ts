@@ -11,10 +11,14 @@ export interface Commands {
     commands: { [key: string]: BaseCommand | undefined }
 }
 
-export function parse(file: string): Commands {
+export function parseFile(fileName: string): Commands {
     const dataBuffer = fs.readFileSync(path.join(process.cwd(), file))
     const data = JSON.parse(dataBuffer.toString())
 
+    return parse(data)
+}
+
+export function parse(data: any): Commands {
     const commands: Commands["commands"] = {}
 
     for (const key of Object.keys(data.commands)) {
@@ -37,10 +41,9 @@ export function parse(file: string): Commands {
         first: data.first,
         commands: {}
     }
-
 }
 
-function dataToCommand(data: any, key: string) {
+function dataToCommand(data:  { [key: string]: any }, key: string) {
     if (!data || !data.type) {
         alert(`NO TYPE FIELD:\n${JSON.stringify(data)}`)
         throw new TypeError("DataParseError")

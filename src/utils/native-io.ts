@@ -1,9 +1,3 @@
-const mouse = require('../../build/Release/native-io.node');
-export const getMousePos = () => {
-    try {
-        const pos = mouse.getMousePos()
-        return JSON.parse(pos)
-    } catch {
-        return undefined
-    }
-}
+const nativeio = require('../../build/Release/native-io.node');
+export const getMousePos: () => { x: number, y: number } = nativeio.getMousePos
+

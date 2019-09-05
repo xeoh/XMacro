@@ -28,6 +28,28 @@
             "type": "MOUSE",
             "preDelay": 3000,
             "action": "LEFT_UP"
+        },
+        "5:": {
+            "type": "GROUP",
+            "preDelay": 3000,
+            "first": "5-1",
+            "loopCount": 3,
+            "commands": {
+                "5-1": {
+                    "type": "MOUSE",
+                    "preDelay": 3000,
+                    "nextCommand": "5-2",
+                    "action": "MOVE",
+                    "x": 400,
+                    "y": 400
+                },
+                "5-2": {
+                    "type": "MOUSE",
+                    "preDelay": "3000",
+                    "nextCommand": "5-2",
+                    "action": "LEFT_DOWN"
+                }
+            }
         }
     }
 }

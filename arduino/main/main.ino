@@ -100,6 +100,28 @@ void mouseUp(String command) {
     }
 }
 
+void keyboardPress(String command) {
+    if (command == "key_press") {
+        String key(receivedChars[1]);
+        Keyboard.press('n');
+        Keyboard.release('n');
+    }
+}
+
+void keyboardDown(String command) {
+    if (command == "key_down") {
+        String key(receivedChars[1]);
+        Keyboard.press('n');
+    }
+}
+
+void keyboardUp(String command) {
+    if (command == "key_up") {
+        String key(receivedChars[1]);
+        Keyboard.release('n');
+    }
+}
+
 void evalData() {
     if (newData == true) {
         // Serial.println("Input: ");
