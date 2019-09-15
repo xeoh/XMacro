@@ -1,39 +1,56 @@
 import { BaseCommand, BaseCommandData } from "./base"
 import { mouseDataToCommand, MOUSE_TYPE } from "./mouse"
 import { KEYBOARD_TYPE, keyboardDataToCommand } from "./keyboard"
+import { CommandRunner } from "../utils/runner"
 
 export const GROUP_TYPE = "GROUP"
 
 export interface GroupCommandData extends BaseCommandData {
     first: string,
-    loopCount: number
-    childs: { [key: string]: BaseCommand | undefined }
+    loopCount: number | undefined
+    commands: { [key: string]: BaseCommand | undefined }
 }
 
-export class KeyboardCommand extends BaseCommand {
+export class GroupCommand extends BaseCommand {
     private loopCount: number
+    private first: string
     private childs: { [key: string]: BaseCommand | undefined }
 
     constructor(data: GroupCommandData) {
         super(data)
 
-        this.loopCount = data.loopCount
-        const { name, childs } = this.parseChilds(data.childs, data.name)
-        this.childs = childs
+        this.loopCount = data.loopCount || 1
+        this.first = data.first
+        this.childs = this.parseChilds(data.commands)
+        console.log(this.childs)
     }
     
     async main() {
         this.setProgress("main")
+
+        for (let i = 0; i < this.loopCount; i++) {
+            let command = this.childs[this.first]
+            while (!!command) {
+                if (!CommandRunner.getInstance().runnable) return
+                
+                await command.run()
+    
+                if (!command.nextCommand) break
+                command = this.childs[command.nextCommand]
+
+                console.log("nextCommand", command)
+            }
+        }
     }
 
-    private parseChilds(childs: { [key: string]: any }, key: string) {
+    private parseChilds(childs: { [key: string]: any }) {
         const parsed: { [key: string]: BaseCommand | undefined } = {}
 
         for (const key of Object.keys(childs)) {
             parsed[key] = this.parseChild(childs[key], key)
         }
 
-        return { childs, name: key }
+        return parsed
     }
 
     private parseChild(data: { [key: string]: any }, key: string) {
@@ -48,7 +65,7 @@ export class KeyboardCommand extends BaseCommand {
             case KEYBOARD_TYPE:
                 return keyboardDataToCommand({ ...data, name: key })
             case GROUP_TYPE:
-                return this.parseChilds()
+                return groupDataToCommand(data)
             default:
                 alert(`UNKNOWN DATA TYPE:\n${JSON.stringify(data)}`)
                 throw new TypeError("DataParseError")
@@ -56,9 +73,8 @@ export class KeyboardCommand extends BaseCommand {
     }
 }
 
-export function GroupDataToCommand(data: any) {
+export function groupDataToCommand(data: any) {
     if (!data || !data.type || data.type !== GROUP_TYPE) return undefined
-
-
-    
+    console.log(data)
+    return new GroupCommand(data)
 }

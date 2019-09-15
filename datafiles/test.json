@@ -1,6 +1,8 @@
 {
-    "name": "sample",
+    "type": "GROUP",
+    "preDelay": 3000,
     "first": "1",
+    "loopCount": 2,
     "commands": {
         "1": {
             "type": "MOUSE",
@@ -27,7 +29,8 @@
         "4": {
             "type": "MOUSE",
             "preDelay": 3000,
-            "action": "LEFT_UP"
+            "action": "LEFT_UP",
+            "nextCommand": "5"
         },
         "5:": {
             "type": "GROUP",
@@ -45,7 +48,7 @@
                 },
                 "5-2": {
                     "type": "MOUSE",
-                    "preDelay": "3000",
+                    "preDelay": 3000,
                     "nextCommand": "5-2",
                     "action": "LEFT_DOWN"
                 }

@@ -1,3 +1,5 @@
+import { CommandRunner } from "../utils/runner"
+
 export interface BaseCommandData {
     name: string
     preDelay: number
@@ -38,8 +40,11 @@ export abstract class BaseCommand {
     }
 
     public async run() {
+        if (!CommandRunner.getInstance().runnable) return
         await this.preRun()
+        if (!CommandRunner.getInstance().runnable) return
         await this.main()
+        if (!CommandRunner.getInstance().runnable) return
         await this.postRun()
     }
     

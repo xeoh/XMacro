@@ -64,9 +64,10 @@ export class SerialManager {
     }
 
     async write(data: string) {
-        await new Promise((resolve) => {
+        await new Promise((resolve, reject) => {
             if (!this._serial) {
                 console.log("Serial Communication Not Connected")
+                resolve()
                 return
             }
 

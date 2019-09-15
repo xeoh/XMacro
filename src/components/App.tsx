@@ -1,6 +1,6 @@
 import React from "react"
 
-import { parse } from "../commands/parser"
+import { parseFile } from "../commands/parser"
 import { SerialManager } from "../utils/serial"
 
 export interface AppState {
@@ -15,13 +15,14 @@ export class App extends React.Component<{}, AppState> {
     }
 
     componentDidMount() {
-        SerialManager.getInstance().connect()
+        // SerialManager.getInstance().connect()
     }
 
     render() {
         return (
             <div>
                 <button onClick={() => { this.toggleActive() }} >{this.state.active ? "비활성화" : "활성화" }</button>
+                <button onClick={() => { this.start() }} >시작</button>
             </div>
         )
     }
@@ -39,18 +40,10 @@ export class App extends React.Component<{}, AppState> {
 
         console.log("Start of Command\n")
         
-        const { first, commands } = parse("./datafiles/test.json")
-        let command = commands[first]
-        while(!!command) {
-            if (!this.state.active) {
-                this.setState({ running: false })
-                return
-            }
-
+        const command = parseFile("./datafiles/test.json")
+        
+        if (command) {
             await command.run()
-
-            if (!command.nextCommand) break
-            command = commands[command.nextCommand]
         }
 
         this.setState({
